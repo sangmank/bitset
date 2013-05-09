@@ -89,10 +89,10 @@ func TestBitSetClearAll(t *testing.T) {
 			t.Error("A zero-length bitset should be fine")
 		}
 	}()
-	b := New(32)
+	b := New(50)
 	b.SetAll()
-	if b.Count() != 32 {
-		t.Errorf("Count should be 32, not %d", b.Count())
+	if b.Count() != 50 {
+		t.Errorf("Count should be 50, not %d", b.Count())
 	}
 
 	b.ClearAll()
@@ -101,8 +101,8 @@ func TestBitSetClearAll(t *testing.T) {
 	}
 
 	b.FlipAll()
-	if b.Count() != 32 {
-		t.Errorf("Count should be 32, not %d", b.Count())
+	if b.Count() != 50 {
+		t.Errorf("Count should be 50, not %d", b.Count())
 	}
 
 	b.FlipAll()
@@ -111,9 +111,23 @@ func TestBitSetClearAll(t *testing.T) {
 	}
 
 	b.Set(10).Set(11)
+	indices := b.SetIndices()
+	if len(indices) != 2 {
+		t.Errorf("Should be [10,11], not %v", b.SetIndices())
+	}
+	if indices[0] != 10 {
+		t.Errorf("Should be [10,11], not %v", b.SetIndices())
+	}
+	if indices[1] != 11 {
+		t.Errorf("Should be [10,11], not %v", b.SetIndices())
+	}
+
 	b.FlipAll()
-	if b.Count() != 30 {
-		t.Errorf("Count should be 30, not %d", b.Count())
+	if b.Count() != 48 {
+		t.Errorf("Count should be 48, not %d", b.Count())
+	}
+	if len(b.SetIndices()) != 48 {
+		t.Errorf("length should be 48, not %v", len(b.SetIndices()))
 	}
 }
 

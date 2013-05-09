@@ -416,6 +416,25 @@ func (b *BitSet) LowestSetIndex() (uint, error) {
 	return 0, fmt.Errorf("no bit set")
 }
 
+func (b *BitSet) SetIndices() []uint {
+	if b == nil {
+		return []uint{}
+	}
+
+	idxs := make([]uint, 0, b.Count())
+	for i := range b.set {
+		word := b.set[i]
+		for word != 0 {
+			rightmost := (word & ((^word) + 1))
+			if rightmost != 0 {
+				idxs = append(idxs, uint(i)*wordSize+uint(popCountUint32(rightmost-1)))
+				word &^= rightmost
+			}
+		}
+	}
+	return idxs
+}
+
 // Dump as bits
 func (b *BitSet) DumpAsBits() string {
 	buffer := bytes.NewBufferString("")
