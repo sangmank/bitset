@@ -117,6 +117,18 @@ func TestBitSetClearAll(t *testing.T) {
 	}
 }
 
+func TestHighestLowest(t *testing.T) {
+	b := New(128)
+	b.Set(10).Set(11)
+	b.Set(122).Set(3)
+	if i, _ := b.HighestSetIndex(); i != 122 {
+		t.Errorf("Highest index should be 11, not %d", i)
+	}
+	if i, _ := b.LowestSetIndex(); i != 3 {
+		t.Errorf("Lowest index should be 10, not %d", i)
+	}
+}
+
 func TestBitSetAndGet(t *testing.T) {
 	v := New(1000)
 	v.Set(100)

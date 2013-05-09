@@ -392,6 +392,30 @@ func (b *BitSet) Any() bool {
 	return !b.None()
 }
 
+func (b *BitSet) HighestSetIndex() (uint, error) {
+	if b != nil {
+		for i := b.Len() - 1; i >= 0; i-- {
+			if b.Test(i) {
+				return i, nil
+			}
+		}
+	}
+	return 0, fmt.Errorf("no bit set")
+}
+
+func (b *BitSet) LowestSetIndex() (uint, error) {
+	if b != nil {
+		for i := range b.set {
+			word := b.set[i]
+			rightmost := (word & ((^word) + 1))
+			if rightmost != 0 {
+				return uint(i)*wordSize + uint(popCountUint32(rightmost-1)), nil
+			}
+		}
+	}
+	return 0, fmt.Errorf("no bit set")
+}
+
 // Dump as bits
 func (b *BitSet) DumpAsBits() string {
 	buffer := bytes.NewBufferString("")
