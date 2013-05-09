@@ -83,6 +83,40 @@ func TestExpand(t *testing.T) {
 	}
 }
 
+func TestBitSetClearAll(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Error("A zero-length bitset should be fine")
+		}
+	}()
+	b := New(32)
+	b.SetAll()
+	if b.Count() != 32 {
+		t.Errorf("Count should be 32, not %d", b.Count())
+	}
+
+	b.ClearAll()
+	if b.Count() != 0 {
+		t.Errorf("Count should be 0, not %d", b.Count())
+	}
+
+	b.FlipAll()
+	if b.Count() != 32 {
+		t.Errorf("Count should be 32, not %d", b.Count())
+	}
+
+	b.FlipAll()
+	if b.Count() != 0 {
+		t.Errorf("Count should be 0, not %d", b.Count())
+	}
+
+	b.Set(10).Set(11)
+	b.FlipAll()
+	if b.Count() != 30 {
+		t.Errorf("Count should be 30, not %d", b.Count())
+	}
+}
+
 func TestBitSetAndGet(t *testing.T) {
 	v := New(1000)
 	v.Set(100)

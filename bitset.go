@@ -149,11 +149,39 @@ func (b *BitSet) Flip(i uint) *BitSet {
 	return b
 }
 
+// Set entire BitSet
+func (b *BitSet) SetAll() *BitSet {
+	if b != nil {
+		for i := range b.set {
+			if b.length < (uint(i)+1)*wordSize {
+				b.set[i] = (1 << (b.length % wordSize)) - 1
+			} else {
+				b.set[i] = ^uint32(0)
+			}
+		}
+	}
+	return b
+}
+
 // Clear entire BitSet
 func (b *BitSet) ClearAll() *BitSet {
 	if b != nil {
 		for i := range b.set {
 			b.set[i] = 0
+		}
+	}
+	return b
+}
+
+// Flip entire BitSet
+func (b *BitSet) FlipAll() *BitSet {
+	if b != nil {
+		for i := range b.set {
+			if b.length < (uint(i)+1)*wordSize {
+				b.set[i] ^= (1 << (b.length % wordSize)) - 1
+			} else {
+				b.set[i] ^= ^uint32(0)
+			}
 		}
 	}
 	return b
